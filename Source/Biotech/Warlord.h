@@ -7,6 +7,7 @@
 #include "Warlord.generated.h"
 
 class AWarrior;
+class AWarriorAttachment;
 class UCapsuleComponent;
 class USceneComponent;
 
@@ -21,6 +22,9 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	AWarriorAttachment* JoinArmy(AWarrior* Warrior);
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -32,9 +36,6 @@ protected:
 	void UpdateArmyAttachments();
 
 public:
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	USceneComponent* ArmyAttachment;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Army")
 	int32 ArmyHalfWidth;
@@ -48,5 +49,5 @@ protected:
 	TArray<AWarrior*> Army;
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<USceneComponent*> ArmyAttachments;
+	TArray<AWarriorAttachment*> ArmyAttachments;
 };

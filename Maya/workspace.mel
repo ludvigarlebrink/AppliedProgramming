@@ -1,0 +1,32 @@
+//Maya 2020 Project Definition
+
+workspace -fr "images" "Images";
+workspace -fr "offlineEdit" "scenes/edits";
+workspace -fr "iprImages" "renderData/iprImages";
+workspace -fr "FBX" "data";
+workspace -fr "renderData" "RenderData";
+workspace -fr "scripts" "Scripts";
+workspace -fr "eps" "data";
+workspace -fr "DAE_FBX" "data";
+workspace -fr "shaders" "renderData/shaders";
+workspace -fr "mel" "scripts";
+workspace -fr "translatorData" "Data";
+workspace -fr "OBJ" "data";
+workspace -fr "scene" "Scenes";
+workspace -fr "mayaLT" "";
+workspace -fr "FBX export" "data";
+workspace -fr "sourceImages" "SourceImages";
+workspace -fr "clips" "Clips";
+workspace -fr "depth" "renderData/depth";
+workspace -fr "teClipExports" "Time Editor/Clip Exports";
+workspace -fr "movie" "Movies";
+workspace -fr "audio" "sound";
+workspace -fr "move" "data";
+workspace -fr "mayaAscii" "scenes";
+workspace -fr "autoSave" "Autosave";
+workspace -fr "sound" "Sound";
+workspace -fr "illustrator" "data";
+workspace -fr "mayaBinary" "scenes";
+workspace -fr "templates" "Assets";
+workspace -fr "OBJexport" "data";
+workspace -fr "timeEditor" "TimeEditor";

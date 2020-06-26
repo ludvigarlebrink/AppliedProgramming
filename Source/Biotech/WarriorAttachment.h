@@ -3,21 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "Warrior.generated.h"
+#include "GameFramework/Actor.h"
+#include "WarriorAttachment.generated.h"
 
-class AWarriorAttachment;
+class AWarrior;
 
 UCLASS()
-class BIOTECH_API AWarrior : public ACharacter
+class BIOTECH_API AWarriorAttachment : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 
-	AWarrior();
-
-	virtual void Tick(float DeltaTime) override;
+	AWarriorAttachment();
 
 protected:
 
@@ -26,5 +24,5 @@ protected:
 public:
 
 	UPROPERTY(BlueprintReadWrite)
-	AWarriorAttachment* WarriorAttachement;
+	AWarrior* Warrior;
 };
