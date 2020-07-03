@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Unit.h"
 #include "Warrior.generated.h"
 
-class AWarriorAttachment;
+class AWarlord;
 
 UCLASS()
-class BIOTECH_API AWarrior : public ACharacter
+class BIOTECH_API AWarrior : public AUnit
 {
 	GENERATED_BODY()
 	
@@ -26,5 +26,8 @@ protected:
 public:
 
 	UPROPERTY(BlueprintReadWrite)
-	AWarriorAttachment* WarriorAttachement;
+	AWarlord* Warlord;
+
+	UPROPERTY(BlueprintReadWrite)
+	AActor* ArmyAttachment;
 };

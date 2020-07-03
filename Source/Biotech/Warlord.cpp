@@ -1,16 +1,53 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Warlord.h"
-#include "WarriorAttachment.h"
+#include "ArmyAttachment.h"
+#include "Warrior.h"
 #include "Components/SceneComponent.h"
 #include "Components/CapsuleComponent.h"
 
 AWarlord::AWarlord()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	ArmyHalfWidth = 1;
 	ArmyHeight = 1;
+}
+
+void AWarlord::JoinArmy(AWarrior* Warrior)
+{
+	if (Army.Num() >= ArmyAttachments.Num())
+	{
+		ExpandArmy();
+	}
+
+	AActor* ArmyAttachment = ArmyAttachments[Army.Num()];
+	Warrior->ArmyAttachment = ArmyAttachment;
+	Warrior->Warlord = this;
+	Army.Add(Warrior);
+}
+
+AWarrior* AWarlord::SpawnWarrior()
+{
+	if (Army.Num() >= ArmyAttachments.Num())
+	{
+		ExpandArmy();
+	}
+
+	AActor* ArmyAttachment = ArmyAttachments[Army.Num()];
+	FActorSpawnParameters Spawn = {};
+	Spawn.SpawnCollisionHandlingOverride =	ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	AWarrior* Warrior = GetWorld()->SpawnActor<AWarrior>(AWarrior::StaticClass(), FTransform(ArmyAttachment->GetActorLocation()), Spawn);
+	Warrior->ArmyAttachment = ArmyAttachment;
+	Warrior->Warlord = this;
+	Army.Add(Warrior);
+
+	return Warrior;
+}
+
+void AWarlord::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void AWarlord::BeginPlay()
@@ -21,7 +58,7 @@ void AWarlord::BeginPlay()
 	ArmyAttachments.SetNum((ArmyHalfWidth * 2 + 1) * ArmyHeight - 1);
 	for (int32 Count = 0; Count < ArmyAttachments.Num(); ++Count)
 	{
-		AWarriorAttachment* Actor = GetWorld()->SpawnActor<AWarriorAttachment>(AWarriorAttachment::StaticClass());
+		AArmyAttachment* Actor = GetWorld()->SpawnActor<AArmyAttachment>(AArmyAttachment::StaticClass());
 		Actor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		ArmyAttachments[Count] = Actor;
 	}
@@ -37,7 +74,7 @@ void AWarlord::ExpandArmy()
 	
 	for (int32 Count = Begin; Count < ArmyAttachments.Num(); ++Count)
 	{
-		AWarriorAttachment* Actor = GetWorld()->SpawnActor<AWarriorAttachment>(AWarriorAttachment::StaticClass());
+		AArmyAttachment* Actor = GetWorld()->SpawnActor<AArmyAttachment>(AArmyAttachment::StaticClass());
 		Actor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		ArmyAttachments[Count] = Actor;
 	}
@@ -67,22 +104,4 @@ void AWarlord::UpdateArmyAttachments()
 			ArmyAttachments[Index1]->SetActorRelativeLocation(FVector(X * -1.0f * Scale.X, (Y + 1) * -1.0f * Scale.Y, 0.0f));
 		}
 	}
-}
-
-void AWarlord::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
-AWarriorAttachment* AWarlord::JoinArmy(AWarrior* Warrior)
-{
-	if (Army.Num() >= ArmyAttachments.Num())
-	{
-		ExpandArmy();
-	}
-
-	AWarriorAttachment* ArmyAttachment = ArmyAttachments[Army.Num()];
-	ArmyAttachment->Warrior = Warrior;
-	Army.Add(Warrior);
-	return ArmyAttachment;
 }

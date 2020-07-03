@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Unit.h"
 #include "Warlord.generated.h"
 
 class AWarrior;
-class AWarriorAttachment;
 class UCapsuleComponent;
 class USceneComponent;
 
 UCLASS()
-class BIOTECH_API AWarlord : public ACharacter
+class BIOTECH_API AWarlord : public AUnit
 {
 	GENERATED_BODY()
 
@@ -20,10 +19,13 @@ public:
 
 	AWarlord();
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UFUNCTION(BlueprintCallable)
-	AWarriorAttachment* JoinArmy(AWarrior* Warrior);
+	void JoinArmy(AWarrior* Warrior);
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UFUNCTION(BlueprintCallable)
+	AWarrior* SpawnWarrior();
 
 protected:
 
@@ -49,5 +51,5 @@ protected:
 	TArray<AWarrior*> Army;
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<AWarriorAttachment*> ArmyAttachments;
+	TArray<AActor*> ArmyAttachments;
 };
