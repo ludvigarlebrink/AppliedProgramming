@@ -2,6 +2,7 @@
 
 #include "EdGraphSchema_Quest.h"
 #include "QuestSystemEditor.h"
+#include "QuestGraphTypes.h"
 
 void UEdGraphSchema_Quest::BreakNodeLinks(UEdGraphNode& TargetNode) const
 {
@@ -23,7 +24,34 @@ void UEdGraphSchema_Quest::CreateDefaultNodesForGraph(UEdGraph& Graph) const
 void UEdGraphSchema_Quest::GetGraphContextActions(FGraphContextMenuBuilder& ContextMenuBuilder) const
 {
 	FQuestSystemEditorModule& EditorModule = FModuleManager::GetModuleChecked<FQuestSystemEditorModule>(TEXT("QuestSystemEditor"));
-	// FGraphNodeClassHelper* ClassCache = EditorModule.GetClassCache().Get();
+	FQuestGraphNodeClassHelper* ClassCache = EditorModule.ClassCache.Get();
+
+	if (true)
+	{
+		FCategorizedGraphActionListBuilder TasksBuilder(TEXT("Stages"));
+
+		TArray<FQuestGraphNodeClassData> NodeClasses;
+		ClassCache->GatherClasses(UBTTaskNode::StaticClass(), NodeClasses);
+
+		for (const auto& NodeClass : NodeClasses)
+		{
+			const FText NodeTypeName = FText::FromString(FName::NameToDisplayString(NodeClass.ToString(), false));
+
+			TSharedPtr<FAISchemaAction_NewNode> AddOpAction = UAIGraphSchema::AddNewNodeAction(TasksBuilder, NodeClass.GetCategory(), NodeTypeName, FText::GetEmpty());
+
+			UClass* GraphNodeClass = UBehaviorTreeGraphNode_Task::StaticClass();
+			if (NodeClass.GetClassName() == UBTTask_RunBehavior::StaticClass()->GetName())
+			{
+				GraphNodeClass = UBehaviorTreeGraphNode_SubtreeTask::StaticClass();
+			}
+
+			UBehaviorTreeGraphNode* OpNode = NewObject<UBehaviorTreeGraphNode>(ContextMenuBuilder.OwnerOfTemporaries, GraphNodeClass);
+			OpNode->ClassData = NodeClass;
+			AddOpAction->NodeTemplate = OpNode;
+		}
+
+		ContextMenuBuilder.Append(TasksBuilder);
+	}
 }
 
 void UEdGraphSchema_Quest::GetContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const

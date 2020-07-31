@@ -14,7 +14,7 @@ extern const FName QuestEditorAppIdentifier;
 
 class IQuestEditor;
 class UQuest;
-struct FGraphNodeClassHelper;
+struct FQuestGraphNodeClassHelper;
 
 class FQuestSystemEditorModule : public IModuleInterface, public IHasMenuExtensibility, public IHasToolBarExtensibility
 {
@@ -33,12 +33,13 @@ public:
 	virtual void ShutdownModule() override;
 	//~End IModuleInterface interface.
 
+public:
+
+	TSharedPtr<FQuestGraphNodeClassHelper> ClassCache;
+
 private:
 
 	TSharedPtr<FExtensibilityManager> MenuExtensibilityManager;
 	TSharedPtr<FExtensibilityManager> ToolBarExtensibilityManager;
 	TArray<TSharedPtr<IAssetTypeActions>> CreatedAssetTypeActions;
-
-	TSharedPtr<FGraphNodeClassHelper> ClassCache;
-
 };

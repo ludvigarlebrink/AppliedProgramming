@@ -37,6 +37,7 @@ public class QuestSystem : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"GameplayTasks",
 			}
 			);
 		

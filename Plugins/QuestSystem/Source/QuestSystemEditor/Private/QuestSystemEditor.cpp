@@ -2,20 +2,22 @@
 
 #include "QuestSystemEditor.h"
 #include "QuestEditor.h"
+#include "QuestNode.h"
+#include "QuestGraphTypes.h"
 #include "AssetTypeActions_Quest.h"
 
 const FName QuestEditorAppIdentifier = FName(TEXT("StaticMeshEditorApp"));
 
-#define LOCTEXT_NAMESPACE "FQuestSystemEditorModule"
+#define LOCTEXT_NAMESPACE "QuestSystemEditor"
 
 TSharedRef<IQuestEditor> FQuestSystemEditorModule::CreateQuestEditor(const EToolkitMode::Type Mode,
 	const TSharedPtr<IToolkitHost>& InitToolkitHost, UQuest* Quest)
 {
 	if (!ClassCache.IsValid())
 	{
-		// ClassCache = MakeShareable(new FGraphNodeClassHelper(UBTNode::StaticClass()));
-		// FGraphNodeClassHelper::AddObservedBlueprintClasses(UBTTask_BlueprintBase::StaticClass());
-		// ClassCache->UpdateAvailableBlueprintClasses();
+		ClassCache = MakeShareable(new FQuestGraphNodeClassHelper(UQuestNode::StaticClass()));
+		FQuestGraphNodeClassHelper::AddObservedBlueprintClasses(UQuestNode::StaticClass());
+		ClassCache->UpdateAvailableBlueprintClasses();
 	}
 
 	TSharedRef<FQuestEditor> NewQuestEditor(new FQuestEditor());
@@ -52,6 +54,7 @@ void FQuestSystemEditorModule::ShutdownModule()
 {
 	MenuExtensibilityManager.Reset();
 	ToolBarExtensibilityManager.Reset();
+	ClassCache.Reset();
 
 	if (FModuleManager::Get().IsModuleLoaded("AssetTools"))
 	{

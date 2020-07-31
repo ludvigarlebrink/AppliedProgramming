@@ -45,7 +45,7 @@ public:
 
 private:
 
-	/** Create widget for graph editing */
+	/** Create widget for graph editing. */
 	TSharedRef<SGraphEditor> CreateGraphEditorWidget(UEdGraph* InGraph);
 	
 	/** Create the properties tab and its content. */

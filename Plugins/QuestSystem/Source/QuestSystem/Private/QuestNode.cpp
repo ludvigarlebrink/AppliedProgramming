@@ -3,3 +3,11 @@
 
 #include "QuestNode.h"
 
+UQuestNode::UQuestNode()
+{
+}
+
+UWorld* UQuestNode::GetWorld() const
+{
+    return nullptr;
+}
